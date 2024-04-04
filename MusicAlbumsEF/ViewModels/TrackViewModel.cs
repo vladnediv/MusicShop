@@ -70,6 +70,8 @@ namespace MusicAlbumsEF.ViewModels
             window.ShowDialog();
         }
 
+           
+
 
         public ICommand DeleteAlbumCommand { get; }
         public void DeleteAlbum()
