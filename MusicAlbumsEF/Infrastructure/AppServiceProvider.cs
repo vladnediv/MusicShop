@@ -10,6 +10,7 @@ using MusicAlbumsEF.ViewModels;
 using MusicAlbumsEF.Views;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,16 +20,12 @@ namespace MusicAlbumsEF.Infrastructure
     public static class AppServiceProvider
     {
         public static ServiceProvider ServiceProvider {  get; private set; }
-
-
         public static void Initialize()
         {
             var services = new ServiceCollection();
 
-            //DbContext configuration / Connecting to the sql server
-            IConfiguration configuration = new ConfigurationBuilder().AddJsonFile("AppSettings.json").Build();
-            string connectionString = configuration.GetConnectionString("MusicDatabase");
-            services.AddDbContext<MusicDbContext>(options =>  options.UseSqlServer(connectionString));
+            //DbContext configuration
+            services.AddDbContext<MusicDbContext>();
 
             //Views
             services.AddTransient<AlbumView, AlbumView>();

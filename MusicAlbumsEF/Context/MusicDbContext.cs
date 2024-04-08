@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MusicAlbumsEF.Models;
 using MusicAlbumsEF.Services;
 using System;
@@ -11,9 +12,18 @@ namespace MusicAlbumsEF.Context
 {
     public class MusicDbContext : DbContext
     {
-        public MusicDbContext(DbContextOptions<MusicDbContext> options) : base(options)
+        public MusicDbContext()
         {
             Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            //Read connection string
+            var configuration = new ConfigurationBuilder().AddJsonFile("AppSettings.json").Build();
+            string connectionString = configuration.GetConnectionString("MusicDatabase");
+
+            optionsBuilder.UseSqlServer(connectionString);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
