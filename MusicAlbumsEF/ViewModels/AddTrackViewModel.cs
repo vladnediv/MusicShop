@@ -20,7 +20,9 @@ namespace MusicAlbumsEF.ViewModels
             _musicPlayerService = musicPlayerService;
             SongTitle = "";
             SongDuration = "";
-            Albums = new List<Album>(_musicPlayerService.GetAllAlbums());
+            var artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
+            if(artist != null) Albums = new List<Album>(_musicPlayerService.GetAllAlbumsByArtist(artist.Id));
+            else Albums = new List<Album>();
             AddTrackCommand = new RelayCommand(AddTrack, CanAddTrack);
         }
         public string SongTitle { get; set; }

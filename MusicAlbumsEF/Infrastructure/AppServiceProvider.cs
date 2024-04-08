@@ -32,7 +32,7 @@ namespace MusicAlbumsEF.Infrastructure
             //Views
             services.AddTransient<AlbumView, AlbumView>();
             services.AddTransient<AddAlbumView, AddAlbumView>();
-            services.AddTransient<AddArtistView, AddArtistView>();
+            services.AddTransient<EditAccountView, EditAccountView>();
             services.AddTransient<AddTrackView, AddTrackView>();
             services.AddTransient<TrackView, TrackView>();
             services.AddTransient<EditAlbumView, EditAlbumView>();
@@ -59,7 +59,7 @@ namespace MusicAlbumsEF.Infrastructure
             //ViewModels
             services.AddTransient<AlbumViewModel, AlbumViewModel>();
             services.AddTransient<AddAlbumViewModel, AddAlbumViewModel>();
-            services.AddTransient<AddArtistViewModel, AddArtistViewModel>();
+            services.AddTransient<EditAccountViewModel, EditAccountViewModel>();
             services.AddTransient<AddTrackViewModel, AddTrackViewModel>();
             services.AddTransient<TrackViewModel, TrackViewModel>();
             services.AddTransient<EditSongViewModel, EditSongViewModel>();

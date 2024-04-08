@@ -60,5 +60,7 @@ namespace MusicAlbumsEF.Services
 
             return false;
         }
+    
+        public static User ActiveUser { get; set; }
     }
 }

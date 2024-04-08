@@ -5,45 +5,75 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicAlbumsEF.Views"
         mc:Ignorable="d"
-        Title="AlbumView" MinHeight="560" MinWidth="895" Height="560" Width="895">
+        Title="AlbumView" MinHeight="644" MinWidth="1160" Height="644" Width="1160">
     <Grid>
 
-        <Grid.RowDefinitions>  
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="auto"/>
         </Grid.RowDefinitions>
 
-        <!--Row 0 Search Album-->
-        <TextBox Grid.Row="0" Margin="5" Padding="5" Height="auto" FontSize="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True">
-            <TextBox.Style>
-                <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
-                    <Style.Resources>
-                        <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
-                            <VisualBrush.Visual>
-                                <Label Content="Type in a album title" FontSize="25" Foreground="LightGray" />
-                            </VisualBrush.Visual>
-                        </VisualBrush>
-                    </Style.Resources>
-                    <Style.Triggers>
-                        <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="Text" Value="{x:Null}">
-                            <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
-                        </Trigger>
-                        <Trigger Property="IsKeyboardFocused" Value="True">
-                            <Setter Property="Background" Value="White" />
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TextBox.Style>
-        </TextBox>
+
+        <!--Row 0 Artist View-->
+        <Grid Grid.Row="0">
+            <WrapPanel VerticalAlignment="Center" Margin="15, 0, 0, 0">
+                <TextBlock Grid.Row="0" Height="auto" FontSize="25" Text="Hello, "></TextBlock>
+                <TextBlock Grid.Row="0" Height="auto" FontSize="25" Text="{Binding ArtistName, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Grid.Row="0" Height="auto" FontSize="25" Text="!"></TextBlock>
+            </WrapPanel>
+            
+            <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+                <Button HorizontalAlignment="Right" Height="auto" Grid.Row="0" FontSize="25" Margin="15" Padding="10" Command="{Binding EditAccountCommand}">Edit account</Button>
+                <Button HorizontalAlignment="Right" Height="auto" Grid.Row="0" FontSize="25" Margin="15" Padding="10" Command="{Binding LogoutCommand}">Log out</Button>    
+            </WrapPanel>
+                
+        </Grid>
+        
+
+        <!--Row 1 Search Album-->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Margin="15, 0, 15, 0" Padding="5" Height="auto" FontSize="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Search for... " FontSize="25" Foreground="LightGray" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <ComboBox Grid.Column="1" FontSize="25" Height="auto" Margin="0,0,15,0" SelectedItem="{Binding SelectedOption, Mode=TwoWay}">
+                <ComboBoxItem Content="Name"></ComboBoxItem>
+                <ComboBoxItem Content="Genre"></ComboBoxItem>
+            </ComboBox>
+        </Grid>
         
 
 
+
+
         <!--Row 1 Show Albums-->
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Albums, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
@@ -55,15 +85,15 @@
 
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" Margin="10" Padding="5">
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" Margin="15" Padding="5">
                             <StackPanel>
                                 <Button Click="PassId" Tag="{Binding Id}" Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.OpenAlbumCommand}">
                                     <Image Source="{Binding PicturePath}" Width="250" Height="250"></Image>
                                 </Button>
-                                <TextBlock Text="{Binding Name}" FontSize="25"></TextBlock>
-                                <TextBlock Text="{Binding ArtistName}" FontSize="15"></TextBlock>
-                                <TextBlock Text="{Binding PublishingYear}" FontSize="15"></TextBlock>
-                                <TextBlock Text="{Binding Genre}" FontSize="15"></TextBlock>
+                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontSize="25"></TextBlock>
+                                <TextBlock Text="{Binding ArtistName, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+                                <TextBlock Text="{Binding PublishingYear, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+                                <TextBlock Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
                             </StackPanel>
                         </Border>
                     </DataTemplate>
@@ -73,16 +103,13 @@
         
         
         
+        
         <!--Row 2 Buttons Add Album, Add Artist, Add Track-->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition/>
-                <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
             <Button Height="auto" Grid.Column="0" FontSize="25" Margin="15" Padding="10" Command="{Binding AddAlbumCommand}">Add Album</Button>
-            <Button Height="auto" Grid.Column="1" FontSize="25" Margin="15" Padding="10" Command="{Binding AddArtistCommand}">Add Artist</Button>
-            <Button Height="auto" Grid.Column="2" FontSize="25" Margin="15" Padding="10" Command="{Binding AddTrackCommand}">Add Track</Button>
         </Grid>
         
 

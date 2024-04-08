@@ -55,6 +55,7 @@ namespace MusicAlbumsEF.ViewModels
                 var window = (UserAlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumView));
                 var viewModel = (UserAlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumViewModel));
                 viewModel.User = _accountService.GetUser(Email);
+                AccountService.ActiveUser = _accountService.GetUser(Email);
                 window.DataContext = viewModel;
                 window.Show();
             }
@@ -71,7 +72,7 @@ namespace MusicAlbumsEF.ViewModels
                 _musicPlayerService.AddArtist(new Models.Artist()
                 {
                     Albums = new List<Models.Album>(),
-                    Country = Country,
+                    Country = Country, 
                     Name = user.Name,
                     UserId = user.Id,
                     YearOfBirth = Year
@@ -80,6 +81,8 @@ namespace MusicAlbumsEF.ViewModels
                 var window = (AlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumView));
                 var viewModel = (AlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumViewModel));
                 viewModel.User = _accountService.GetUser(Email);
+                AccountService.ActiveUser = _accountService.GetUser(Email);
+                viewModel.Close += () => { window.Close(); };
                 window.DataContext = viewModel;
                 window.Show();
             }

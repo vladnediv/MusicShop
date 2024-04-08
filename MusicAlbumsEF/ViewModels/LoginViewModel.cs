@@ -55,9 +55,12 @@ namespace MusicAlbumsEF.ViewModels
                 //TO EDIT: DIFFERENT WINDOWS IF USER OR ADMIN
                 //IF ADMIN:
                 if(user.IsArtist) {
+                    AccountService.ActiveUser = user;
                     var window = (AlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumView));
                     var viewModel = (AlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumViewModel));
                     viewModel.User = user;
+                    viewModel.Email = email;
+                    viewModel.Close += () => { window.Close(); };
                     window.DataContext = viewModel;
                     CloseAction();
                     window.Show();
@@ -69,6 +72,7 @@ namespace MusicAlbumsEF.ViewModels
                     var window = (UserAlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumView));
                     var viewModel = (UserAlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumViewModel));
                     viewModel.User = user;
+
                     window.DataContext = viewModel;
                     CloseAction();
                     window.Show();

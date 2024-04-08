@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Forms;
 using System.Windows.Input;
 
@@ -18,17 +19,31 @@ namespace MusicAlbumsEF.ViewModels
     public class AlbumViewModel : BaseViewModel
     {
         private readonly MusicPlayerService _musicPlayerService;
-        public AlbumViewModel(MusicPlayerService musicPlayerService)
+        private readonly AccountService _accountService;
+        public AlbumViewModel(MusicPlayerService musicPlayerService, AccountService accountService)
         {
+            _accountService = accountService;
             _musicPlayerService = musicPlayerService;
-
+            Artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
             Albums = new ObservableCollection<Album>();
             //Commands
             OpenAlbumCommand = new RelayCommand(OpenAlbum);
             AddAlbumCommand = new RelayCommand(AddAlbum);
-            AddArtistCommand = new RelayCommand(AddArtist);
-            AddTrackCommand = new RelayCommand(AddTrack);
+            EditAccountCommand = new RelayCommand(EditAccount);
+            LogoutCommand = new RelayCommand(Logout);
         }
+
+        public Artist Artist { get { return _artist; } set { _artist = value; OnPropertyChanged(); } }
+        private Artist _artist;
+
+        //test code
+        public string ArtistName
+        {
+            get { return Artist.Name; }
+            set { ArtistName = value; OnPropertyChanged(); }
+        }
+        public string Email;
+        //test code
 
         public User User
         {
@@ -61,15 +76,23 @@ namespace MusicAlbumsEF.ViewModels
                 }
             }
         }
-        private void FilterAlbums(string name)
+        public ComboBoxItem SelectedOption { get; set; }
+        private void FilterAlbums(string SearchText)
         {
-            var Artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == User.Id);
-            if(Artist != null)
+            if (SelectedOption != null)
             {
-                var albums = _musicPlayerService.GetAllAlbumsByArtist(Artist.Id).Where(album => album.Name.Contains(name)).ToList();
-                Albums = new ObservableCollection<Album>(albums);
+                if (SelectedOption.Content.ToString() == "Name")
+                {
+                    var albums = _musicPlayerService.GetAllAlbumsByArtist(Artist.Id).Where(album => album.Name.Contains(SearchText)).ToList();
+                    Albums = new ObservableCollection<Album>(albums);
+                }
+                else if (SelectedOption.Content.ToString() == "Genre")
+                {
+                    var albums = _musicPlayerService.GetAllAlbumsByArtist(Artist.Id).Where(album => album.Genre.Contains(SearchText)).ToList();
+                    Albums = new ObservableCollection<Album>(albums);
+                }
             }
-            else { Albums = new ObservableCollection<Album>(); }
+            else System.Windows.MessageBox.Show("Select a search option!");
         }
 
 
@@ -91,18 +114,12 @@ namespace MusicAlbumsEF.ViewModels
             album.Tracks = new ObservableCollection<Track>(_musicPlayerService.GetTracksById(AlbumId).OrderByDescending(x => x.PlaceInOrder).Reverse());
             var trackViewModel = (TrackViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(TrackViewModel));
             trackViewModel.Album = album;
-            var window = (TrackView)AppServiceProvider.ServiceProvider.GetService(typeof(TrackView));
-            trackViewModel.CloseAction += () => { window.Close(); };
-            window.DataContext = trackViewModel;
-            window.ShowDialog();
+            var windowTrack = (TrackView)AppServiceProvider.ServiceProvider.GetService(typeof(TrackView));
+            trackViewModel.CloseAction += () => { windowTrack.Close(); };
+            windowTrack.DataContext = trackViewModel;
+            windowTrack.ShowDialog();
 
-            var Artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == User.Id);
-
-            if (Artist != null)
-            {
-                Albums = new ObservableCollection<Album>(_musicPlayerService.GetAllAlbumsByArtist(Artist.Id));
-            }
-            else Albums = new ObservableCollection<Album>();
+            Albums = new ObservableCollection<Album>(_musicPlayerService.GetAllAlbumsByArtist(Artist.Id));
         }
 
 
@@ -114,11 +131,11 @@ namespace MusicAlbumsEF.ViewModels
         public void AddAlbum()
         {
             var ViewModel = (AddAlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(AddAlbumViewModel));
-            ViewModel.SelectedArtist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == User.Id);
+            ViewModel.SelectedArtist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
             var window = (AddAlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(AddAlbumView));
             window.DataContext = ViewModel;
             window.ShowDialog();
-            var Artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == User.Id);
+            var Artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
             if (Artist != null)
             {
                 Albums = new ObservableCollection<Album>(_musicPlayerService.GetAllAlbumsByArtist(Artist.Id));
@@ -127,18 +144,20 @@ namespace MusicAlbumsEF.ViewModels
         }
 
         //Add Artist
-        public ICommand AddArtistCommand { get; }
-        public void AddArtist()
+        public ICommand EditAccountCommand { get; }
+        public void EditAccount()
         {
-            var window = (AddArtistView)AppServiceProvider.ServiceProvider.GetService(typeof(AddArtistView));
+            var window = (EditAccountView)AppServiceProvider.ServiceProvider.GetService(typeof(EditAccountView));
             window.ShowDialog();
         }
 
-        //Add Track
-        public ICommand AddTrackCommand { get; }
-        public void AddTrack()
+        //Logout
+        public Action Close { get; set; }
+        public ICommand LogoutCommand { get; }
+        public void Logout()
         {
-            var window = (AddTrackView)AppServiceProvider.ServiceProvider.GetService(typeof(AddTrackView));
+            var window = (LoginView)AppServiceProvider.ServiceProvider.GetService(typeof(LoginView));
+            System.Windows.Application.Current.Windows[0].Close();
             window.ShowDialog();
         }
 

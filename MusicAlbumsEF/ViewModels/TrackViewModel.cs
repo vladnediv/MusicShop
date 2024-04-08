@@ -77,7 +77,7 @@ namespace MusicAlbumsEF.ViewModels
         public void DeleteAlbum()
         {
             _musicPlayerService.DeleteAlbum(Album);
-            CloseAction.Invoke();
+            CloseAction();
         }
 
 

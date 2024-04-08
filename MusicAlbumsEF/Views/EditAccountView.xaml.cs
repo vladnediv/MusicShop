@@ -18,9 +18,9 @@ namespace MusicAlbumsEF.Views
     /// <summary>
     /// Interaction logic for AddArtistView.xaml
     /// </summary>
-    public partial class AddArtistView : Window
+    public partial class EditAccountView : Window
     {
-        public AddArtistView(AddArtistViewModel addArtistViewModel)
+        public EditAccountView(EditAccountViewModel addArtistViewModel)
         {
             DataContext = addArtistViewModel;
             InitializeComponent();

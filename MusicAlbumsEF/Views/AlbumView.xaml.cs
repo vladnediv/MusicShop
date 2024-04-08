@@ -33,6 +33,7 @@ namespace MusicAlbumsEF.Views
             var Btn = (Button)sender;
             _albumViewModel.AlbumId = (int)Btn.Tag;
             DataContext = _albumViewModel;
+            
         }
     }
 }

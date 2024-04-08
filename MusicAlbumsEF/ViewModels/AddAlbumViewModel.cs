@@ -23,6 +23,7 @@ namespace MusicAlbumsEF.ViewModels
             AlbumTitle = "";
             SelectedGenre = "";
             PicturePath = "";
+            SelectedArtist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
 
             //Commands
             AddAlbumCommand = new RelayCommand(AddNewAlbum, CanAddNewAlbum);
@@ -50,15 +51,16 @@ namespace MusicAlbumsEF.ViewModels
         public ICommand AddAlbumCommand { get; }
         public void AddNewAlbum()
         {
+            var artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
             var album = new Album()
             {
                 Name = AlbumTitle,
-                ArtistName = SelectedArtist.Name,
-                Artist = SelectedArtist,
+                ArtistName = artist.Name,
+                Artist = artist,
                 PublishingYear = YearOfPublishing,
                 Genre = SelectedGenre,
                 PicturePath = PicturePath,
-                ArtistId = SelectedArtist.Id,
+                ArtistId = artist.Id,
                 Tracks = null,
                 //DELETE AFTER
                 PrimeCost = 0,
@@ -75,7 +77,8 @@ namespace MusicAlbumsEF.ViewModels
                 PicturePath = "https://static.vecteezy.com/system/resources/previews/014/166/470/original/headphones-icon-in-simple-style-vector.jpg";
             }
             var album = _musicPlayerService.GetAlbumByName(AlbumTitle);
-            var IfCan = album == null && AlbumTitle.Length > 0 && SelectedArtist != null && YearOfPublishing > 0 && YearOfPublishing < 2024 && SelectedGenre.Length > 0;
+            var artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
+            var IfCan = album == null && AlbumTitle.Length > 0 && YearOfPublishing > 0 && YearOfPublishing < 2024 && SelectedGenre.Length > 0;
             return IfCan;
         }
 

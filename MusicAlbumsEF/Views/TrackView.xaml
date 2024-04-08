@@ -94,8 +94,6 @@
         <StackPanel Grid.Column="1" VerticalAlignment="Bottom">
             <Button Margin="10" Padding="5" Content="Edit Album" FontSize="15" Command="{Binding EditAlbumCommand}"></Button>
             <Button Margin="10" Padding="5" Content="Delete Album" FontSize="15" Command="{Binding DeleteAlbumCommand}"></Button>
-            <Button Margin="10" Padding="5" Content="Edit Artist" FontSize="15" Command="{Binding EditArtistCommand}"></Button>
-            <Button Margin="10" Padding="5" Content="Delete Artist" FontSize="15" Command="{Binding DeleteArtistCommand}"></Button>
         </StackPanel>
     </Grid>
 </Window>
