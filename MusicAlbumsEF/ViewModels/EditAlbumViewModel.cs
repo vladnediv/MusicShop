@@ -31,13 +31,13 @@ namespace MusicAlbumsEF.ViewModels
         public ICommand EditAlbumCommand { get; }
         public bool CanEditAlbum()
         {
-            var IfCan = AlbumToEdit.Name.Length > 0 && AlbumToEdit.Artist != null && AlbumToEdit.PublishingYear > 0 && AlbumToEdit.PublishingYear < 2024;
+            var IfCan = AlbumToEdit.Name.Length > 0 && AlbumToEdit.Artist != null && AlbumToEdit.PublishingYear > 0 && AlbumToEdit.PublishingYear < 2024 && AlbumToEdit.PrimeCost > 0 && AlbumToEdit.SellPrice > AlbumToEdit.PrimeCost;
             return IfCan;
         }
         public void EditAlbum()
         {
             AlbumToEdit.ArtistName = _musicPlayerService.GetArtist(AlbumToEdit.ArtistId).Name;
-            _musicPlayerService.EditAlbum(AlbumToEdit.Id, AlbumToEdit.Name, AlbumToEdit.ArtistName, AlbumToEdit.PublishingYear, AlbumToEdit.Genre);
+            _musicPlayerService.EditAlbum(AlbumToEdit.Id, AlbumToEdit.Name, AlbumToEdit.ArtistName, AlbumToEdit.PublishingYear, AlbumToEdit.PrimeCost, AlbumToEdit.SellPrice, AlbumToEdit.Genre);
             CloseAction.Invoke();
         }
     }

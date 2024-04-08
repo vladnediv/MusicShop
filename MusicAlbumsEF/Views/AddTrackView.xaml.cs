@@ -20,9 +20,8 @@ namespace MusicAlbumsEF.Views
     /// </summary>
     public partial class AddTrackView : Window
     {
-        public AddTrackView(AddTrackViewModel addTrackViewModel)
+        public AddTrackView()
         {
-            DataContext = addTrackViewModel;
             InitializeComponent();
         }
     }

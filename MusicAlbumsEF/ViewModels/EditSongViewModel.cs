@@ -29,7 +29,7 @@ namespace MusicAlbumsEF.ViewModels
         public ICommand EditTrackCommand { get; }
         public bool CanEditTrack()
         {
-            return TrackToEdit.Title.Length > 0 && TrackToEdit.Duration.Length > 3 && TrackToEdit.PlaceInOrder > 0 && TrackToEdit.PlaceInOrder != null && TrackToEdit.AlbumId > 0;
+            return TrackToEdit.Title.Length > 0 && TrackToEdit.Duration.Length > 3 && TrackToEdit.PlaceInOrder > 0 && TrackToEdit.PlaceInOrder != 0 && TrackToEdit.AlbumId > 0;
         }
         public void EditTrack()
         {

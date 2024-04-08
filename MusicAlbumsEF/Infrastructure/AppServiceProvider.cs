@@ -20,6 +20,7 @@ namespace MusicAlbumsEF.Infrastructure
     {
         public static ServiceProvider ServiceProvider {  get; private set; }
 
+
         public static void Initialize()
         {
             var services = new ServiceCollection();

@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicAlbumsEF.Views"
         mc:Ignorable="d"
-        Title="AlbumView" MinHeight="644" MinWidth="1160" Height="644" Width="1160">
+        Title="AlbumView" MinHeight="678" MinWidth="1160" Height="644" Width="1160">
     <Grid>
 
         <Grid.RowDefinitions>
@@ -94,6 +94,11 @@
                                 <TextBlock Text="{Binding ArtistName, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
                                 <TextBlock Text="{Binding PublishingYear, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
                                 <TextBlock Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding SellPrice, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontStyle="Italic"></TextBlock>
+                                    <TextBlock Text="$" FontSize="25" FontStyle="Italic"></TextBlock>
+                                </WrapPanel>
                             </StackPanel>
                         </Border>
                     </DataTemplate>

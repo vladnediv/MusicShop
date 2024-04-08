@@ -50,11 +50,13 @@ namespace MusicAlbumsEF.Services
         {
             return _AlbumRepository.GetAll().FirstOrDefault(a => a.Name == name);
         }
-        public void EditAlbum(int id, string Name, string ArtistName, int PublishingYear, string Genre)
+        public void EditAlbum(int id, string Name, string ArtistName, int PublishingYear, decimal PrimeCost, decimal SellPrice, string Genre)
         {
             _AlbumRepository.Get(id).Name = Name;
             _AlbumRepository.Get(id).ArtistName = ArtistName;
             _AlbumRepository.Get(id).PublishingYear = PublishingYear;
+            _AlbumRepository.Get(id).PrimeCost = PrimeCost;
+            _AlbumRepository.Get(id).SellPrice = SellPrice;
             _AlbumRepository.Get(id).Genre = Genre;
             _AlbumRepository.Update(_AlbumRepository.Get(id));
         }

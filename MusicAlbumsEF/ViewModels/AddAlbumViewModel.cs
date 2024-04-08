@@ -46,6 +46,9 @@ namespace MusicAlbumsEF.ViewModels
 
         public string PicturePath { get; set; }
 
+        public decimal PrimeCost { get; set; }
+        public decimal SellPrice { get; set; }
+
 
         //AddAlbumCommand
         public ICommand AddAlbumCommand { get; }
@@ -63,8 +66,8 @@ namespace MusicAlbumsEF.ViewModels
                 ArtistId = artist.Id,
                 Tracks = null,
                 //DELETE AFTER
-                PrimeCost = 0,
-                SellPrice = 0
+                PrimeCost = PrimeCost,
+                SellPrice = SellPrice
                 //
         };
             /*SelectedArtist.Albums.Add(album);*/
@@ -78,7 +81,7 @@ namespace MusicAlbumsEF.ViewModels
             }
             var album = _musicPlayerService.GetAlbumByName(AlbumTitle);
             var artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
-            var IfCan = album == null && AlbumTitle.Length > 0 && YearOfPublishing > 0 && YearOfPublishing < 2024 && SelectedGenre.Length > 0;
+            var IfCan = album == null && AlbumTitle.Length > 0 && YearOfPublishing > 0 && YearOfPublishing < 2024 && PrimeCost > 0 && SellPrice > PrimeCost && SelectedGenre.Length > 0;
             return IfCan;
         }
 

@@ -19,16 +19,23 @@ namespace MusicAlbumsEF.ViewModels
         private readonly MusicPlayerService _musicPlayerService;
         public TrackViewModel(MusicPlayerService musicPlayerService)
         {
+            Discount = 10;
             _musicPlayerService = musicPlayerService;
             EditAlbumCommand = new RelayCommand(EditAlbum);
             DeleteAlbumCommand = new RelayCommand(DeleteAlbum);
             EditArtistCommand = new RelayCommand(EditArtist);
-            EditSongCommand = new RelayCommand(EditSong);
-            DeleteSongCommand = new RelayCommand(DeleteSong);
-            DeleteArtistCommand = new RelayCommand(DeleteArtist);
+            EditSongCommand = new RelayCommand(EditSong, IsSongChosen);
+            DeleteSongCommand = new RelayCommand(DeleteSong, IsSongChosen);
+            SetDiscountCommand = new RelayCommand(SetDiscount);
+            IncrementDiscountCommand = new RelayCommand(IncrementDiscount);
+            AddSongCommand = new RelayCommand(AddSong);
         }
+
         private Album _Album;
         public Album Album { get { return _Album; } set { if (_Album != value) _Album = value; OnPropertyChanged(); } }
+
+        public ObservableCollection<Track> Songs { get { return _Songs; } set { _Songs = value; OnPropertyChanged(); } }
+        private ObservableCollection<Track> _Songs;
 
         public Action CloseAction { get; set; }
 
@@ -46,6 +53,29 @@ namespace MusicAlbumsEF.ViewModels
             window.DataContext = editTrackViewModel;
             window.ShowDialog();   
         }
+        public bool IsSongChosen()
+        {
+            return SelectedTrack != null;
+        }
+
+        public ICommand AddSongCommand { get; }
+        public void AddSong()
+        {
+            var window = ((AddTrackView)AppServiceProvider.ServiceProvider.GetService(typeof(AddTrackView)));
+            //edit
+
+
+            var viewModel = ((AddTrackViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(AddTrackViewModel)));
+            viewModel.SelectedAlbum = Album;
+            window.DataContext = viewModel;
+
+
+            //edit
+            window.ShowDialog();
+
+            Album.Tracks = new ObservableCollection<Track>(_musicPlayerService.GetTracksById(Album.Id).ToList());
+        }
+
 
         public ICommand DeleteSongCommand { get; }
         public void DeleteSong()
@@ -92,12 +122,31 @@ namespace MusicAlbumsEF.ViewModels
             window.ShowDialog();
         }
 
-        
-        public ICommand DeleteArtistCommand { get; }
-        public void DeleteArtist()
+        //Discount
+        private int _Discount;
+        public int Discount { get { return _Discount; } set { if (value >= 0 && value <= 100) { _Discount = value; OnPropertyChanged(); } } }
+
+        public ICommand IncrementDiscountCommand { get; }
+        public void IncrementDiscount()
         {
-            _musicPlayerService.DeleteArtist(_musicPlayerService.GetArtist(Album.ArtistId));
-            CloseAction.Invoke();
+            if (Discount + 10 <= 100)
+            {
+                Discount += 10;
+            }
+        }
+        public ICommand SetDiscountCommand { get; }
+        public void SetDiscount()
+        {
+            var newPrice = Album.SellPrice - Album.SellPrice / 100 * Discount;
+            if(newPrice > Album.PrimeCost)
+            {
+                _musicPlayerService.EditAlbum(Album.Id, Album.Name, Album.ArtistName, Album.PublishingYear, Album.PrimeCost, newPrice, Album.Genre);
+                CloseAction();
+            }
+            else
+            {
+                MessageBox.Show("Sell price should be bigger than prime cost!");
+            }
         }
     }
 }
