@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MusicAlbumsEF.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -19,9 +20,19 @@ namespace MusicAlbumsEF.Views
     /// </summary>
     public partial class UserAlbumView : Window
     {
-        public UserAlbumView()
+        private readonly UserAlbumViewModel _userAlbumViewModel;
+        public UserAlbumView(UserAlbumViewModel userAlbumViewModel)
         {
             InitializeComponent();
+            _userAlbumViewModel = userAlbumViewModel;
+        }
+
+        public void PassId(object sender, RoutedEventArgs e)
+        {
+            var Btn = (Button)sender;
+            _userAlbumViewModel.AlbumId = (int)Btn.Tag;
+            DataContext = _userAlbumViewModel;
+
         }
     }
 }

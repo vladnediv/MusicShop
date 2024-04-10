@@ -5,7 +5,7 @@
 namespace MusicAlbumsEF.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class @new : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,8 @@ namespace MusicAlbumsEF.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Password = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    IsArtist = table.Column<bool>(type: "bit", nullable: false)
+                    IsArtist = table.Column<bool>(type: "bit", nullable: false),
+                    Balance = table.Column<decimal>(type: "decimal(18,2)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -61,7 +62,8 @@ namespace MusicAlbumsEF.Migrations
                     Genre = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     PrimeCost = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     SellPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PicturePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -72,6 +74,11 @@ namespace MusicAlbumsEF.Migrations
                         principalTable: "Artists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Albums_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -98,8 +105,8 @@ namespace MusicAlbumsEF.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "IsArtist", "Name", "Password" },
-                values: new object[] { 1, "admin@gmail.com", true, "Admin", "8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918" });
+                columns: new[] { "Id", "Balance", "Email", "IsArtist", "Name", "Password" },
+                values: new object[] { 1, null, "admin@gmail.com", true, "Admin", "8C6976E5B5410415BDE908BD4DEE15DFB167A9C873FC4BB8A81F6F2AB448A918" });
 
             migrationBuilder.InsertData(
                 table: "Artists",
@@ -110,6 +117,11 @@ namespace MusicAlbumsEF.Migrations
                 name: "IX_Albums_ArtistId",
                 table: "Albums",
                 column: "ArtistId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Albums_UserId",
+                table: "Albums",
+                column: "UserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Artists_UserId",

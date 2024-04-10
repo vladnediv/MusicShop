@@ -22,5 +22,6 @@ namespace MusicAlbumsEF.Models
         public decimal PrimeCost { get; set; }
         public decimal SellPrice { get; set; }
         public string PicturePath { get; set; }
+        public string WebLink { get; set; }
     }
 }

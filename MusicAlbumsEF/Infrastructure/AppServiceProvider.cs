@@ -39,6 +39,7 @@ namespace MusicAlbumsEF.Infrastructure
             services.AddTransient<LoginView, LoginView>();
             services.AddTransient<RegisterView, RegisterView>();
             services.AddTransient<UserAlbumView, UserAlbumView>();
+            services.AddTransient<EditUserAccountView, EditUserAccountView>();
 
 
             //Repository
@@ -46,6 +47,7 @@ namespace MusicAlbumsEF.Infrastructure
             services.AddTransient<ArtistRepository, ArtistRepository>();
             services.AddTransient<TrackRepository, TrackRepository>();
             services.AddTransient<UserRepository, UserRepository>();
+            services.AddTransient<OrderRepository, OrderRepository>();
 
 
             //Services
@@ -66,6 +68,7 @@ namespace MusicAlbumsEF.Infrastructure
             services.AddTransient<LoginViewModel, LoginViewModel>();
             services.AddTransient<RegisterViewModel, RegisterViewModel>();
             services.AddTransient<UserAlbumViewModel, UserAlbumViewModel>();
+            services.AddTransient<EditUserAccountViewModel, EditUserAccountViewModel>();
 
 
             ServiceProvider = services.BuildServiceProvider();

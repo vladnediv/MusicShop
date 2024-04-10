@@ -3,6 +3,7 @@ using MusicAlbumsEF.Repository;
 using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace MusicAlbumsEF.Services
                 return false;
             }
 
-            var user = new User() { Password = password, Name = name, Email = email, IsArtist = false };
+            var user = new User() { Password = password, Name = name, Email = email, IsArtist = false, Balance = 0, Albums = new ObservableCollection<Album>() };
 
             _userRepository.Add(user);
 

@@ -52,10 +52,10 @@ namespace MusicAlbumsEF.ViewModels
             var res = _accountService.RegisterUser(_passwordHasher.HasPassword(_password), Email, Name);
             if (res == true)
             {
+                AccountService.ActiveUser = _accountService.GetUser(Email);
                 var window = (UserAlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumView));
                 var viewModel = (UserAlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumViewModel));
                 viewModel.User = _accountService.GetUser(Email);
-                AccountService.ActiveUser = _accountService.GetUser(Email);
                 window.DataContext = viewModel;
                 window.Show();
             }
@@ -77,11 +77,10 @@ namespace MusicAlbumsEF.ViewModels
                     UserId = user.Id,
                     YearOfBirth = Year
                 });
-
+                AccountService.ActiveUser = _accountService.GetUser(Email);
                 var window = (AlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumView));
                 var viewModel = (AlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(AlbumViewModel));
                 viewModel.User = _accountService.GetUser(Email);
-                AccountService.ActiveUser = _accountService.GetUser(Email);
                 viewModel.Close += () => { window.Close(); };
                 window.DataContext = viewModel;
                 window.Show();

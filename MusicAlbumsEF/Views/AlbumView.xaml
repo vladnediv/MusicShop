@@ -72,7 +72,7 @@
 
 
 
-        <!--Row 1 Show Albums-->
+        <!--Row 2 Show Albums-->
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Albums, UpdateSourceTrigger=PropertyChanged}">
                 <ItemsControl.ItemsPanel>

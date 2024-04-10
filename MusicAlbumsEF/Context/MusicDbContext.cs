@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace MusicAlbumsEF.Context
 {
@@ -46,5 +47,6 @@ namespace MusicAlbumsEF.Context
         public DbSet<Artist> Artists { get; set; }
         public DbSet<Track> Tracks { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Order> Orders { get; set; }
     }
 }

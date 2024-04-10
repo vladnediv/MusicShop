@@ -2,7 +2,9 @@
 using MusicAlbumsEF.Repository;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,12 +16,16 @@ namespace MusicAlbumsEF.Services
         private readonly ArtistRepository _ArtistRepository;
         private readonly AlbumRepository _AlbumRepository;
         private readonly TrackRepository _TrackRepository;
+        private readonly OrderRepository _OrderRepository;
+        private readonly UserRepository _UserRepository;
 
-        public MusicPlayerService(ArtistRepository artistRepository, AlbumRepository albumRepository, TrackRepository trackRepository)
+        public MusicPlayerService(ArtistRepository artistRepository, AlbumRepository albumRepository, TrackRepository trackRepository, OrderRepository orderRepository, UserRepository userRepository)
         {
             _AlbumRepository = albumRepository;
             _ArtistRepository = artistRepository;
             _TrackRepository = trackRepository;
+            _OrderRepository = orderRepository;
+            _UserRepository = userRepository;
         }
 
         //Service for Albums
@@ -41,6 +47,21 @@ namespace MusicAlbumsEF.Services
             var albums = _AlbumRepository.GetAll().Where(x => x.ArtistId == ArtistId).ToList();
             if (albums != null) return albums;
             else return new List<Album>();
+        }
+        public ICollection<Album> GetUserAlbums(int UserId)
+        {
+            var orders = _OrderRepository.GetAll().Where(x => x.UserId == UserId).ToList();
+            var albums = new List<Album>();
+            if (orders != null)
+            {
+               
+                foreach (var order in orders)
+                {
+                    albums.Add(_AlbumRepository.Get(order.AlbumId));
+                }
+
+            }
+            return albums;
         }
         public Album GetAlbum(int id)
         {
@@ -90,6 +111,11 @@ namespace MusicAlbumsEF.Services
             _ArtistRepository.Get(id).YearOfBirth = YearOfBirth;
             _ArtistRepository.Update(_ArtistRepository.Get(id));
         }
+        public void EditBalance(int UserId, decimal? balance)
+        {
+            _UserRepository.Get(UserId).Balance = balance;
+            _UserRepository.Update(_UserRepository.Get(UserId));
+        }
 
 
 
@@ -116,6 +142,12 @@ namespace MusicAlbumsEF.Services
             _TrackRepository.Get(id).Duration = Duration;
             _TrackRepository.Get(id).PlaceInOrder = PlaceInOrder;
             _TrackRepository.Update(_TrackRepository.Get(id));
+        }
+
+        //Service for Order
+        public void BuyAlbum(int UserId, int AlbumId)
+        {
+            _OrderRepository.Add(new Order() { AlbumId = AlbumId, UserId = UserId });
         }
     }
 }

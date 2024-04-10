@@ -69,10 +69,10 @@ namespace MusicAlbumsEF.ViewModels
                 //IF USER:
                 else
                 {
+                    AccountService.ActiveUser = user;
                     var window = (UserAlbumView)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumView));
                     var viewModel = (UserAlbumViewModel)AppServiceProvider.ServiceProvider.GetService(typeof(UserAlbumViewModel));
                     viewModel.User = user;
-
                     window.DataContext = viewModel;
                     CloseAction();
                     window.Show();

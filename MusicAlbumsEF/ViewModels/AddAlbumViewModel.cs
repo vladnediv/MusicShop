@@ -23,6 +23,7 @@ namespace MusicAlbumsEF.ViewModels
             AlbumTitle = "";
             SelectedGenre = "";
             PicturePath = "";
+            WebPath = "";
             SelectedArtist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);
 
             //Commands
@@ -45,7 +46,7 @@ namespace MusicAlbumsEF.ViewModels
         public string SelectedGenre { get; set; }
 
         public string PicturePath { get; set; }
-
+        public string WebPath { get; set; }
         public decimal PrimeCost { get; set; }
         public decimal SellPrice { get; set; }
 
@@ -65,10 +66,9 @@ namespace MusicAlbumsEF.ViewModels
                 PicturePath = PicturePath,
                 ArtistId = artist.Id,
                 Tracks = null,
-                //DELETE AFTER
                 PrimeCost = PrimeCost,
-                SellPrice = SellPrice
-                //
+                SellPrice = SellPrice,
+                WebLink = WebPath
         };
             /*SelectedArtist.Albums.Add(album);*/
             _musicPlayerService.AddAlbum(album);
@@ -78,6 +78,10 @@ namespace MusicAlbumsEF.ViewModels
             if(PicturePath.Length == 0)
             {
                 PicturePath = "https://static.vecteezy.com/system/resources/previews/014/166/470/original/headphones-icon-in-simple-style-vector.jpg";
+            }
+            if(WebPath.Length == 0)
+            {
+                WebPath = "https://www.youtube.com";
             }
             var album = _musicPlayerService.GetAlbumByName(AlbumTitle);
             var artist = _musicPlayerService.GetAllArtists().FirstOrDefault(x => x.UserId == AccountService.ActiveUser.Id);

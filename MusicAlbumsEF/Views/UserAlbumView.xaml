@@ -5,8 +5,107 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MusicAlbumsEF.Views"
         mc:Ignorable="d"
-        Title="UserAlbumView" Height="450" Width="800">
+        Title="UserAlbumView" MinHeight="600" MinWidth="930">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel VerticalAlignment="Center">
+            <WrapPanel Margin="15,0,0,5">
+                <TextBlock Height="auto" FontSize="25">Hello, </TextBlock>
+                <TextBlock Height="auto" FontSize="25" Text="{Binding User.Name, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+                <TextBlock Height="auto" FontSize="25">!</TextBlock>
+            </WrapPanel>
+            <WrapPanel Margin="15,0,0,0">
+                <TextBlock Height="auto" FontSize="20">Your Balance:</TextBlock>
+                <TextBlock Height="auto" FontSize="20" Text="{Binding Balance, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </WrapPanel>
+            <WrapPanel Margin="15,0,0,0">
+                <TextBlock Height="auto" FontSize="20" VerticalAlignment="Center">Purchased albums:</TextBlock>
+                <TextBlock Height="auto" FontSize="20" VerticalAlignment="Center" Margin="0,0,10,0" Text="{Binding AmountItems, UpdateSourceTrigger=PropertyChanged}"></TextBlock>
+            </WrapPanel>
+        </StackPanel>
+
+
+        <WrapPanel HorizontalAlignment="Right" VerticalAlignment="Center">
+            <Button Height="auto" FontSize="25" Margin="15" Padding="10" Content="Account" Command="{Binding EditAccountCommand}"></Button>
+            <Button Height="auto" FontSize="25" Margin="15" Padding="10" Content="Logout" Command="{Binding LogoutCommand}"></Button>
+        </WrapPanel>
         
+        <!--Row 1 Search-->
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBox Grid.Column="0" Margin="15, 0, 15, 0" Padding="5" Height="auto" FontSize="25" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" IsEnabled="True">
+                <TextBox.Style>
+                    <Style TargetType="TextBox" xmlns:sys="clr-namespace:System;assembly=mscorlib">
+                        <Style.Resources>
+                            <VisualBrush x:Key="CueBannerBrush" AlignmentX="Left" AlignmentY="Center" Stretch="None">
+                                <VisualBrush.Visual>
+                                    <Label Content="Search for... " FontSize="25" Foreground="LightGray" />
+                                </VisualBrush.Visual>
+                            </VisualBrush>
+                        </Style.Resources>
+                        <Style.Triggers>
+                            <Trigger Property="Text" Value="{x:Static sys:String.Empty}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="Text" Value="{x:Null}">
+                                <Setter Property="Background" Value="{StaticResource CueBannerBrush}" />
+                            </Trigger>
+                            <Trigger Property="IsKeyboardFocused" Value="True">
+                                <Setter Property="Background" Value="White"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TextBox.Style>
+            </TextBox>
+            <ComboBox Grid.Column="1" FontSize="25" Height="auto" Margin="0,0,15,0" SelectedItem="{Binding SelectedOption, Mode=TwoWay}">
+                <ComboBoxItem Content="Name"></ComboBoxItem>
+                <ComboBoxItem Content="Genre"></ComboBoxItem>
+                <ComboBoxItem Content="Artist"></ComboBoxItem>
+                <ComboBoxItem Content="Purchased"></ComboBoxItem>
+            </ComboBox>
+        </Grid>
+
+        <!--Row 2 albums-->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Albums, UpdateSourceTrigger=PropertyChanged}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel>
+
+                        </WrapPanel>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border BorderBrush="Black" BorderThickness="1" CornerRadius="10" Margin="15" Padding="5">
+                            <StackPanel>
+                                <Button Click="PassId" Tag="{Binding Id}" Command="{Binding RelativeSource={RelativeSource AncestorType=ItemsControl}, Path=DataContext.AddAlbumCommand}">
+                                    <Image Source="{Binding PicturePath}" Width="250" Height="250"></Image>
+                                </Button>
+                                <TextBlock Text="{Binding Name, UpdateSourceTrigger=PropertyChanged}" FontSize="25"></TextBlock>
+                                <TextBlock Text="{Binding ArtistName, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+                                <TextBlock Text="{Binding PublishingYear, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+                                <TextBlock Text="{Binding Genre, UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+
+                                <WrapPanel>
+                                    <TextBlock Text="{Binding SellPrice, UpdateSourceTrigger=PropertyChanged}" FontSize="25" FontStyle="Italic"></TextBlock>
+                                    <TextBlock Text="$" FontSize="25" FontStyle="Italic"></TextBlock>
+                                </WrapPanel>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
     </Grid>
 </Window>
